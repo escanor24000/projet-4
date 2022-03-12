@@ -13,7 +13,7 @@ function produit() {
 let contents = "";
           console.log(items);
           data.map(function(product){
-            contents +=`<a href="./product.html?id=42">
+            contents +=`<a href="./product.html?id=${product._id}">
             <article>
               <img src="${product.imageUrl}" alt="Lorem ipsum dolor sit amet, Kanap name1">
               <h3 class="productName">${product.name}</h3>
