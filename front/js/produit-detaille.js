@@ -9,15 +9,15 @@ function getProductDataByClassName() {
     let items = document.getElementById("content");
     fetch('http://localhost:3000/api/products/' + id)
         .then(function (res) {
-            console.log(res);
+            //console.log(res);
             if (res.ok) {
                 return res.json();
             }
         })
         .then(function (product) {
-            console.log(product);
+            //console.log(product);
             let contents = "";
-            console.log(items);
+            //console.log(items);
           let color_content = "";
           for(i in product.colors){
             color_content += `<option value="${product.colors[i]}">${product.colors[i]}</option>`;
@@ -43,13 +43,14 @@ function getProductDataByClassName() {
                       <label for="color-select">Choisir une couleur :</label>
                       <select name="color-select" id="colors">
                           <option value="">--SVP, choisissez une couleur --</option>
-                          ${color_content} 
+                          ${color_content}
                       </select>
                     </div>
     
                     <div class="item__content__settings__quantity">
                       <label for="itemQuantity">Nombre d'article(s) (1-100) :</label>
                       <input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">
+                      <input type="hidden" name="id" value=${product._id}>
                     </div>
                   </div>
     
@@ -59,12 +60,48 @@ function getProductDataByClassName() {
     
                 </div>
               </article>`
-          console.log(contents)
+          //console.log(contents)
             items.innerHTML = contents;
+            addProductToCart();
         })
         .catch(function (error) {
-            console.log(error);
+            //console.log(error);
         });
 }
 
 getProductDataByClassName();
+
+
+function addProductToCart(){
+  const btn = document.getElementById('addToCart');
+  console.log(btn);
+btn.addEventListener('click',function(){
+  const name = document.getElementById("title").textContent;
+  const quantity = document.getElementById("quantity").value;
+  const price = document.getElementById("price").textContent;
+  const color = document.getElementById("colors").value;
+  produit = {
+    nom : name,
+    quantite : quantity,
+    prix : price,
+    couleur : color,
+  }
+  //function produit(nom, quantite, prix, couleur){
+    //this.nom = nom;
+    //this.quantite = quantite;
+    //this.prix = prix;
+    //this.couleur = couleur;
+  //}
+
+  //const produit1 = new produit(name, quantity, price, color);
+  let cadie = [];
+  cadie.push(produit);
+  console.log(produit);
+  const produit1 = JSON.stringify(produit);
+  console.log(produit1);
+  localStorage.setItem('produit',JSON.stringify(cadie));
+  const stockage = window.localStorage;
+  console.log(stockage);
+})
+}
+
