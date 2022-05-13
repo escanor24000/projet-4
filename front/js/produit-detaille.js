@@ -50,7 +50,7 @@ function getProductDataByClassName() {
                     <div class="item__content__settings__quantity">
                       <label for="itemQuantity">Nombre d'article(s) (1-100) :</label>
                       <input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">
-                      <input type="hidden" name="id" value=${product._id}>
+                      <input type="hidden" name="id" id="code" value=${product._id}>
                     </div>
                   </div>
     
@@ -76,32 +76,47 @@ function addProductToCart(){
   const btn = document.getElementById('addToCart');
   console.log(btn);
 btn.addEventListener('click',function(){
+  const id = document.getElementById("code").value;
   const name = document.getElementById("title").textContent;
   const quantity = document.getElementById("quantity").value;
   const price = document.getElementById("price").textContent;
   const color = document.getElementById("colors").value;
+  let cadProduct=[];
+  if(localStorage.getItem("cadie")!=undefined || localStorage.getItem("cadie")!= null){
+    cadProduct = JSON.parse(localStorage.getItem("cadie"));
+  }
+  
   produit = {
+    id : id,
     nom : name,
     quantite : quantity,
     prix : price,
     couleur : color,
   }
-  //function produit(nom, quantite, prix, couleur){
-    //this.nom = nom;
-    //this.quantite = quantite;
-    //this.prix = prix;
-    //this.couleur = couleur;
-  //}
+  const index = search (cadProduct, id);
+  if(index==-1){
+    cadProduct.push(produit);
+  }else{
+    cadProduct[index].quantite = parseInt(cadProduct[index].quantite ) + parseInt(quantity);
+  }
 
-  //const produit1 = new produit(name, quantity, price, color);
-  let cadie = [];
-  cadie.push(produit);
-  console.log(produit);
-  const produit1 = JSON.stringify(produit);
-  console.log(produit1);
-  localStorage.setItem('produit',JSON.stringify(cadie));
-  const stockage = window.localStorage;
-  console.log(stockage);
+
+
+  console.log(cadProduct);
+  localStorage.setItem("cadie", JSON.stringify(cadProduct));
+
 })
 }
+
+function search(cadie, id)
+    {
+      console.log(id);console.log(cadie);
+        for(var i = 0 ; i <cadie.length ; i++){
+          console.log(cadie[i].id);
+            if (id == cadie[i].id) {console.log(i)
+              return i};
+            }
+        {console.log(1)
+          return -1};
+    }
 
