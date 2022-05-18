@@ -24,7 +24,7 @@ function getProductDataByClassName() {
           }
                 contents = `<article>
                 <div class="item__img">
-                  <img src="${product.imageUrl}" alt="Photographie d'un canapé">
+                  <img src="${product.imageUrl}" alt="Photographie d'un canapé" id="image">
                 </div>
                 <div class="item__content">
     
@@ -49,7 +49,7 @@ function getProductDataByClassName() {
     
                     <div class="item__content__settings__quantity">
                       <label for="itemQuantity">Nombre d'article(s) (1-100) :</label>
-                      <input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">
+                      <input type="number" name="itemQuantity" min="1" max="100" value="1" id="quantity">
                       <input type="hidden" name="id" id="code" value=${product._id}>
                     </div>
                   </div>
@@ -77,6 +77,7 @@ function addProductToCart(){
   console.log(btn);
 btn.addEventListener('click',function(){
   const id = document.getElementById("code").value;
+  const Photographie = document.getElementById("image").src;
   const name = document.getElementById("title").textContent;
   const quantity = document.getElementById("quantity").value;
   const price = document.getElementById("price").textContent;
@@ -88,6 +89,7 @@ btn.addEventListener('click',function(){
   
   produit = {
     id : id,
+    photo : Photographie,
     nom : name,
     quantite : quantity,
     prix : price,
