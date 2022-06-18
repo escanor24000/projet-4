@@ -28,7 +28,6 @@ if(recupObjet.length >0){
     </div>
   </article>`
   
-  
   });
 }else{
   content="<div> Panier vide</div>";
@@ -52,17 +51,7 @@ if(recupObjet[index].quantite == 0){
 localStorage.setItem("cadie", JSON.stringify(recupObjet));
 location.reload();
 return false;
-/*for(var l = 0 ; l < recupObjet.length; l++ ) {
-  //console.log(recupObjet)
-  if(recupObjet[l].quantite == 1){
-    recupObjet.splice(l, 1);
-    return(l);
-   
-    console.log(recupObjet);
-  }
-}*/
 }
-
 
 function search(cadie, id)
     {
@@ -75,3 +64,68 @@ function search(cadie, id)
         {console.log(1)
           return -1};
     }
+
+    const btnCommander = document.getElementById("order");
+    btnCommander.addEventListener('click', function(e){
+      e.preventDefault();
+      const cadie = JSON.parse(localStorage.getItem('cadie'));
+      let productIds =[];
+      for(var i = 0 ; i <cadie.length; i++){
+        productIds.push(cadie[i].id);
+      }
+     const order = {
+      contact:{
+          firstName :  document.getElementById("firstName").value.trim(),
+           lastName : document.getElementById("lastName").value.trim(),
+           address : document.getElementById("address").value,
+           city : document.getElementById("city").value.trim(),
+          email : document.getElementById("email").value.trim(),
+      },
+      products: productIds
+         }
+      console.log(order);
+
+      if (order.contact.firstName.length < 1 || order.contact.firstName.length > 10){
+        alert('error prenom');
+        return;
+      }else if(order.contact.lastName.length < 1 || order.contact.lastName.length > 255){
+        alert('error nom')
+        return;
+      }else if(order.contact.address.length < 1 || order.contact.address.length > 255){
+        alert('error address')
+        return;
+      }else if(order.contact.city.length < 1 || order.contact.city.length > 15 ){
+        alert('error ville');
+        return;
+      }else if(!validateEmail(order.contact.email)){
+        alert('error email');
+        return;
+      };
+
+      fetch('http://localhost:3000/api/products/order', {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body : JSON.stringify(order)
+      })
+        .then(function(data){
+          console.log(data);
+          return data.json();
+        })
+        .then(function(res){
+          console.log(res.orderId);
+          
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
+      ;
+    })
+    const validateEmail = (email) => {
+      return email.match(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+    };
+
