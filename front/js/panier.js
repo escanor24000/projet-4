@@ -2,6 +2,8 @@ const recupObjet = JSON.parse(localStorage.getItem("cadie"));
 console.log(recupObjet);
 function produitPanier(){
 let content = "";
+let totprix = 0;
+let totquantite=0;
 if(recupObjet.length >0){
   recupObjet.forEach(resultats => {
     console.log(recupObjet)
@@ -27,15 +29,19 @@ if(recupObjet.length >0){
       </div>
     </div>
   </article>`
-  
+  totprix = totprix + (Number.parseFloat(resultats.quantite) * Number.parseFloat(resultats.prix));
+  totquantite = totquantite + (Number.parseFloat(resultats.quantite));
   });
+
 }else{
-  content="<div> Panier vide</div>";
-  document.getElementsByClassName("cart__price")[0].style.display = 'none';
+  content="<h2> Panier vide</h2>";
   document.getElementsByClassName("cart__order")[0].style.display = 'none';
+  cart__price.style.display = 'none';
+  
 }
 
 cart__items.innerHTML = content;
+cart__price.innerHTML = `<p>Total (<span id="totalQuantity">${totquantite}</span> articles) : <span id="totalPrice">${totprix}</span> €</p>`
 }
 produitPanier();
 
@@ -116,7 +122,8 @@ function search(cadie, id)
         })
         .then(function(res){
           console.log(res.orderId);
-          
+          localStorage.setItem("idvalidation", JSON.stringify(res.orderId));
+          window.location.href = "http://127.0.0.1:5501/front/html/validation_produit.html";
         })
         .catch(function(error) {
           console.log(error);

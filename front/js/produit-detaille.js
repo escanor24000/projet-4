@@ -30,7 +30,7 @@ function getProductDataByClassName() {
     
                   <div class="item__content__titlePrice">
                     <h1 id="title">"${product.name}"</h1>
-                    <p>Prix : <span id="price">"${product.price}"</span>€</p>
+                    <p>Prix : <span id="price">${product.price}</span>€</p>
                   </div>
     
                   <div class="item__content__description">
