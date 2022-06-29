@@ -1,4 +1,3 @@
-
 function produit() {
   var items = document.getElementById("item");
   fetch('http://localhost:3000/api/products')
@@ -24,7 +23,12 @@ let contents = "";
           items.innerHTML = contents;
   })
 .catch(function(error) {
-  console.log(error);
+  console.log(error.message);
+  if(error.message == "404"){
+    items.innerHTML = `<h1>produit non trouvé</h1>`;
+  }else{
+    items.innerHTML = `<h1>contacte l'administrateur</h1>`;
+  }
 });
 }
  produit();
