@@ -70,7 +70,7 @@ function getProductDataByClassName() {
             if(error.message == "Not Found"){
               items.innerHTML = `<h1>produit non trouvé</h1>`;
             }else{
-              items.innerHTML = `<h1>contacte l'administrateur</h1>`;
+              items.innerHTML = `<h1>contacter l'administrateur</h1>`;
             }
             
         });

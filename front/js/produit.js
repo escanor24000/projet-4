@@ -24,10 +24,11 @@ let contents = "";
   })
 .catch(function(error) {
   console.log(error.message);
-  if(error.message == "404"){
+  if(error.message == "Not Found"){
     items.innerHTML = `<h1>produit non trouvé</h1>`;
   }else{
-    items.innerHTML = `<h1>contacte l'administrateur</h1>`;
+    items.innerHTML = `<h1>contacter l'administrateur</h1>`;
+    document.getElementsByClassName("titles").hidden = true
   }
 });
 }
