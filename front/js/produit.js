@@ -6,6 +6,7 @@ function produit() {
     if(res.ok){
       return res.json();
     }
+    throw Error(res.statusText);
   })
 .then(function(data){
   console.log(data);

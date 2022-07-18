@@ -70,7 +70,7 @@ function search(cadie, id)
         {console.log(1)
           return -1};
     }
-
+    
     const btnCommander = document.getElementById("order");
     btnCommander.addEventListener('click', function(e){
       e.preventDefault();
@@ -107,7 +107,7 @@ function search(cadie, id)
         alert('error email');
         return;
       };
-
+      
       fetch('http://localhost:3000/api/products/order', {
         method: "POST",
         headers: {
@@ -118,7 +118,10 @@ function search(cadie, id)
       })
         .then(function(data){
           console.log(data);
-          return data.json();
+          if(data.ok){
+            return data.json();
+          }
+            throw Error(data.statusText);
         })
         .then(function(res){
           console.log(res.orderId);
@@ -126,7 +129,12 @@ function search(cadie, id)
           window.location.href = "http://127.0.0.1:5501/front/html/validation_produit.html";
         })
         .catch(function(error) {
-          console.log(error);
+          console.log(error.message);
+          if(error.message == "Not Found"){
+            cart.innerHTML = `<h1>produit non trouvé</h1>`;
+          }else{
+            cart.innerHTML = `<h1>contacter l'administrateur</h1>`;
+          }
         })
       ;
     })
