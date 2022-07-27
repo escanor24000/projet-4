@@ -93,6 +93,15 @@ btn.addEventListener('click',function(){
   if(localStorage.getItem("cadie")!=undefined || localStorage.getItem("cadie")!= null){
     cadProduct = JSON.parse(localStorage.getItem("cadie"));
   }
+  if(quantity < 0 || quantity > 100){
+    alert('vous pouvez sélectionner une quantité en 1 et 100');
+    return;
+  }else if(color === ""){
+    alert('sélectionner une couleur');
+    return;
+  }
+
+
   
   produit = {
     id : id,

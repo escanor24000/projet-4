@@ -7,3 +7,4 @@ validation_commande.innerHTML = content;
 console.log(content);
 }
 validation();
+window.localStorage.removeItem('cadie');

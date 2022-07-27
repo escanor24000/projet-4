@@ -4,7 +4,7 @@ function produitPanier(){
 let content = "";
 let totprix = 0;
 let totquantite=0;
-if(recupObjet.length >0){
+if(recupObjet!=null && recupObjet.length > 0){
   recupObjet.forEach(resultats => {
     console.log(recupObjet)
    
@@ -16,12 +16,12 @@ if(recupObjet.length >0){
       <div class="cart__item__content__description">
         <h2>${resultats.nom}</h2>
         <p>${resultats.couleur}</p>
-        <p>${resultats.prix}</p>
+        <p id=${resultats.id}></p>
       </div>
       <div class="cart__item__content__settings">
         <div class="cart__item__content__settings__quantity">
-          <p>Qté : ${resultats.quantite} </p>
-          <!--<input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">-->
+          <label>Qté :  </label>
+          <input id="${resultats.id}_price" type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${resultats.quantite}" onchange="recalculate(event)">
         </div>
         <div class="cart__item__content__settings__delete">
         <button class="deleteItem" onclick="btnSupprimer('`+resultats.id+`')">Supprimer</button>
@@ -29,6 +29,7 @@ if(recupObjet.length >0){
       </div>
     </div>
   </article>`
+  getPrice(resultats.id);
   totprix = totprix + (Number.parseFloat(resultats.quantite) * Number.parseFloat(resultats.prix));
   totquantite = totquantite + (Number.parseFloat(resultats.quantite));
   });
@@ -91,20 +92,27 @@ function search(cadie, id)
          }
       console.log(order);
 
+      const isFirstCharNum = (str) => str.match(new RegExp(/^\d/)) !== null;
+
       if (order.contact.firstName.length < 1 || order.contact.firstName.length > 10){
-        alert('error prenom');
+        var firstName = document.getElementById("firstNameErrorMsg");
+        firstName.style.display ="";
         return;
       }else if(order.contact.lastName.length < 1 || order.contact.lastName.length > 255){
-        alert('error nom')
+        var lastName = document.getElementById("lastNameErrorMsg");
+        lastName.style.display ="";
         return;
-      }else if(order.contact.address.length < 1 || order.contact.address.length > 255){
-        alert('error address')
+      }else if(order.contact.address.length < 1 || order.contact.address.length > 255 || (!isFirstCharNum(order.contact.address))){
+        var address = document.getElementById("addressErrorMsg");
+        address.style.display ="";
         return;
       }else if(order.contact.city.length < 1 || order.contact.city.length > 15 ){
-        alert('error ville');
+        var city = document.getElementById("cityErrorMsg");
+        city.style.display ="";
         return;
       }else if(!validateEmail(order.contact.email)){
-        alert('error email');
+        var email = document.getElementById("emailErrorMsg");
+        email.style.display ="";
         return;
       };
       
@@ -138,9 +146,50 @@ function search(cadie, id)
         })
       ;
     })
+
     const validateEmail = (email) => {
       return email.match(
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
     };
+
+    
+
+    function getPrice(id){
+      fetch('http://localhost:3000/api/products/' + id)
+        .then(function (res) {
+            console.log(res);
+            if (res.ok) {
+                return res.json();
+            }
+            throw Error(res.statusText);
+        })
+        .then(function (product) {
+          document.getElementById(id).textContent=product.price;
+        })
+        .catch(function (error) {
+            console.log(error.message);
+            if(error.message == "Not Found"){
+              items.innerHTML = `<h1>produit non trouvé</h1>`;
+            }else{
+              items.innerHTML = `<h1>contacter l'administrateur</h1>`;
+            }
+            
+        });
+}
+
+function recalculate(event){
+  console.log(event.target.id);
+  const quantite  = document.getElementById(event.target.id).value;
+  const vals = event.target.id.split("_");
+  const id  = vals[0];
+  const index = search(recupObjet,id);
+  recupObjet[index].quantite = quantite;
+  produitPanier();
+  console.log(recupObjet[index]);
+  console.log(id);
+  console.log(quantite);
+}
+
+    
 
