@@ -83,12 +83,13 @@ function addProductToCart(){
   const btn = document.getElementById('addToCart');
   console.log(btn);
 btn.addEventListener('click',function(){
-  const id = document.getElementById("code").value;
+  
   const Photographie = document.getElementById("image").src;
   const name = document.getElementById("title").textContent;
   const quantity = document.getElementById("quantity").value;
   const price = document.getElementById("price").textContent;
   const color = document.getElementById("colors").value;
+  const id = document.getElementById("code").value+"_"+color;
   let cadProduct=[];
   if(localStorage.getItem("cadie")!=undefined || localStorage.getItem("cadie")!= null){
     cadProduct = JSON.parse(localStorage.getItem("cadie"));

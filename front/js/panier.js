@@ -156,7 +156,8 @@ function search(cadie, id)
     
 
     function getPrice(id){
-      fetch('http://localhost:3000/api/products/' + id)
+      const idProduit = id.split("_");
+      fetch('http://localhost:3000/api/products/' + idProduit[0])
         .then(function (res) {
             console.log(res);
             if (res.ok) {
@@ -166,6 +167,7 @@ function search(cadie, id)
         })
         .then(function (product) {
           document.getElementById(id).textContent=product.price;
+          
         })
         .catch(function (error) {
             console.log(error.message);
@@ -180,12 +182,19 @@ function search(cadie, id)
 
 function recalculate(event){
   console.log(event.target.id);
-  const quantite  = document.getElementById(event.target.id).value;
+  let quantite  = document.getElementById(event.target.id).value;
   const vals = event.target.id.split("_");
-  const id  = vals[0];
+  const id  = vals[0]+"_"+vals[1];
   const index = search(recupObjet,id);
+  console.log(index);
+  if(quantite < 0 || quantite > 100){
+    alert('vous pouvez sélectionner une quantité en 1 et 100');
+    document.getElementById(event.target.id).value = recupObjet[index].quantite;
+    return;
+  }
   recupObjet[index].quantite = quantite;
   produitPanier();
+ 
   console.log(recupObjet[index]);
   console.log(id);
   console.log(quantite);
