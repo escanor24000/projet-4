@@ -78,7 +78,11 @@ function search(cadie, id)
       const cadie = JSON.parse(localStorage.getItem('cadie'));
       let productIds =[];
       for(var i = 0 ; i <cadie.length; i++){
-        productIds.push(cadie[i].id);
+        tabId = cadie[i].id.split("_");
+        const index = search(productIds,tabId[0]);
+        if(index==-1){
+          productIds.push(tabId[0]);
+        }
       }
      const order = {
       contact:{
@@ -134,7 +138,7 @@ function search(cadie, id)
         .then(function(res){
           console.log(res.orderId);
           localStorage.setItem("idvalidation", JSON.stringify(res.orderId));
-          window.location.href = "http://127.0.0.1:5501/front/html/validation_produit.html";
+          window.location.href = "http://127.0.0.1:5501/front/html/confirmation.html";
         })
         .catch(function(error) {
           console.log(error.message);
