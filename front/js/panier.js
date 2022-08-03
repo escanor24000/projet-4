@@ -138,7 +138,7 @@ function search(cadie, id)
         .then(function(res){
           console.log(res.orderId);
           localStorage.setItem("idvalidation", JSON.stringify(res.orderId));
-          window.location.href = "http://127.0.0.1:5501/front/html/confirmation.html";
+          window.location.href = "/front/html/confirmation.html";
         })
         .catch(function(error) {
           console.log(error.message);
